@@ -1,53 +1,100 @@
-#include <stdlib.h>
 #include "main.h"
-#include <stdio.h>
 
-/**
- * count_words - Counts words in a string based on spaces.
- * @str: The string whose the words will be counted.
- * Return: The number of words of the string if it has some.
- *	   0 otherwise.
- */
-int count_words(char *str)
-{
-	int i = 0, n = 0;
-
-	for (i = 0; str[i] != '\0'; i++)
-		if (str[i] == 32)
-			n++;
-	return (n);
-}
-
-/**
- * strtow - Splits a string into words.
- * @str: The string to split.
- * Return: An array of string which the last item is NULL
- *	   if everthing runs well.
- *	  NULL if str == NULL or str = "".
- */
+ /**
+   *strtow - splits a stirng into words
+   *@str: string to be splitted
+   *
+   *Return: pointer to the array of splitted words
+   */
 char **strtow(char *str)
 {
-	int i = 0, j = 0, k = 0, n = 0;
-	char **res;
+	char **split;
+	int i, j = 0, temp = 0, size = 0, words = num_words(str);
 
-	n = count_words(str);
-	res = malloc(n * sizeof(char *));
-	if (res != NULL)
+	if (words == 0)
+		return (NULL);
+	split = (char **) malloc(sizeof(char *) * (words + 1));
+
+	if (split != NULL)
 	{
-		for (i = 0; i < n; i++)
+		for (i = 0; i <= len(str) && words; i++)
 		{
-			n = 0;
-			while (str[j++] != 32)
-				n++;
-			j++;
-			res[i] = malloc((n + 1) * sizeof(char));
-			if (res[i] != NULL)
+			if ((str[i] != ' ') && (str[i] != '\0'))
+				size++;
+			else if (((str[i] == ' ') || (str[i] == '\0')) && i && (str[i - 1] != ' '))
 			{
-				for (k = 0; k < n; k++)
-					res[i][k] = str[j - n - 1 + k];
-				res[i][k] = '\0';
+				split[j] = (char *) malloc(sizeof(char) * size + 1);
+				if (split[j] != NULL)
+				{
+					while (temp < size)
+					{
+						split[j][temp] = str[(i - size) +temp];
+						temp++;
+					}
+					split[j][temp] = '\0';
+					size = temp = 0;
+					j++;
+				}
+				else
+				{
+					while (j-- >= 0)
+						free(split[j]);
+					free(split);
+					return (NULL);
+				}
 			}
 		}
+		split[words] = NULL;
+		return (split);
 	}
-	return (res);
+	else
+		return (NULL);
 }
+
+/**
+  * num_words - counts the number of words in str
+  *@str: string to be used
+  *
+  *Return: number of words
+  */
+int num_words(char *str)
+{
+	int i = 0, words = 0;
+
+	while (i <= len(str))
+	{
+		if ((str[i] != ' ') && (str[i] != '\0'))
+		{
+			i++;
+		}
+		else if (((str[i] == ' ') || (str[i] == '\0')) && i && (str[i - 1] != ' '))
+		{
+			words += 1;
+			i++;
+		}
+		else
+		{
+			i++;
+		}
+	}
+	return (words);
+}
+
+/**
+  * len - returns length of str
+  *@str: string to be counted
+  *
+  * Return: length of the string
+  */
+int len(char *str)
+{
+	int len = 0;
+
+	if (str != NULL)
+	{
+		while (str[len])
+			len++;
+	}
+	return (len);
+}
+
