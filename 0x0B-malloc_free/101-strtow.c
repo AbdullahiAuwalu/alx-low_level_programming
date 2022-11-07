@@ -1,4 +1,6 @@
 #include <stdlib.h>
+#include "main.h"
+#include <stdio.h>
 
 /**
  * count_words - Counts words in a string based on spaces.
