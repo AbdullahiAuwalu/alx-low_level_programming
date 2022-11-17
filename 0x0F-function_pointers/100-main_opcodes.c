@@ -38,6 +38,6 @@ int main(int argc, char *argv[])
 		printf(" ");
 		address++;
 	}
-	printf("\n")
-		return (0);
+	printf("\n");
+	return (0);
 }
